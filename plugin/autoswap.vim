@@ -147,8 +147,7 @@ endfunction
 
 " LINUX: Detection function for Linux, uses mwctrl
 function! AS_DetectActiveWindow_Linux (filename)
-	let shortname = fnamemodify(a:filename,":t")
-	let find_win_cmd = 'wmctrl -l | grep -i " '.shortname.' .*vim" | tail -n1 | cut -d" " -f1'
+	let find_win_cmd = 'wmctrl -l | grep -i $(xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME | cut -f 3 -d' ') | tail -n1 | cut -d" " -f1'
 	let active_window = system(find_win_cmd)
 	return (active_window =~ '0x' ? active_window : "")
 endfunction
